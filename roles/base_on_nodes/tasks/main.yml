@@ -12,12 +12,6 @@
         state: stopped
         enabled: no
   tags: [disabled_firewalld]
-- name: move my etc_hosts
-  copy:
-       src: etc_hosts
-       dest: /root
-       backup: yes
-  tags: [mv_etc_hosts] 
 
 - name: Generate ssh-key
   shell: ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -q -N ""
