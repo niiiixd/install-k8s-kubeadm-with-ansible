@@ -1,0 +1,104 @@
+- name: echo to hosts
+  shell: echo "{{item.ip}} {{item.name}}" >> /etc/hosts
+  with_items: "{{nodes_list}}"
+  tags: [touch_file]
+
+- name: Disable Selinux Shell
+  shell: sed -i 's/^SELINUX=enforcing$/SELINUX=disabled/' /etc/selinux/config
+  tags: [disable_selinux]
+#- name: Disable Firewalld
+#  service:
+#        name: firewalld
+#        state: stopped
+#        enabled: no
+#  tags: [disabled_firewalld]
+- name: move my etc_hosts
+  copy:
+       src: etc_hosts
+       dest: /root
+       backup: yes
+  tags: [mv_etc_hosts] 
+
+- name: Generate ssh-key
+  shell: ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -q -N ""
+  tags: [ssh-keygen]
+
+- name: update packages
+  yum:
+          name: '*'
+          state: latest
+  tags: [update_yum]
+
+- name: Make bridge-nf config
+  shell:  echo "br_netfilter " > /etc/modules-load.d/bridge-nf.conf
+  tags: [netfilter]
+
+- name: Change sysctl for bridge
+  shell: echo "net.bridge.bridge-nf-call-iptables = 1" >> /etc/sysctl.conf
+  tags: [chsysctl]
+
+- name: Change fstab
+  shell: swapoff -a && sed -i '/swap/s/^/#/g' /etc/fstab
+  tags: [swapoff]
+
+- name: Reboot Nodes
+  reboot:
+          msg: " Reboot to apply changes "
+  tags: [reboot]
+
+- name: Install packages
+  yum:
+          name: "{{ item }}"
+          state: latest
+  loop:
+          - " yum-utils "
+          - " device-mapper-persistent-data " 
+          - " lvm2 "
+          - " vim "
+  tags: [installpkg]
+- name: add docker repository
+  get_url:
+          url: https://download.docker.com/linux/centos/docker-ce.repo
+          dest: /etc/yum.repos.d/
+  tags: [docker_repo]
+- name: add kubernetes repository
+  copy:
+          src: kubernetes.repo
+          dest: /etc/yum.repos.d/
+  tags: [kuber_repo]
+
+- name: Yum Clean
+  shell: yum clean all && yum list -y
+  tags: [clean_yum]
+
+- name: install docker
+  yum:
+          name: docker-ce
+          state: latest
+  notify: Restart Docker
+  tags: [install_docker]
+
+- name: create Daemon.json
+  copy:
+          src: daemon.json
+          dest: /etc/docker/
+          owner: root
+          group: root
+          backup: yes
+  notify: Restart Docker
+  tags: [daemon-json]
+
+- name: Install Kubernetes
+  yum:
+    name:
+      - kubelet
+      - kubeadm
+      - kubectl
+    state: latest
+  notify: Restart kubelet
+  tags: [install_k8s]
+
+- name: Reboot Nodes
+  reboot:
+          msg: " Reboot to apply changes "
+  tags: [reboot_k8s]

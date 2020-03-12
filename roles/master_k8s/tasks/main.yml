@@ -1,0 +1,16 @@
+- name: echo to hosts
+  shell: kubeadm init --pod-network-cidr=192.168.0.0/16 --apiserver-advertise-address={{init_ip}} --upload-certs
+  with_items: "{{master}}"
+  register: join_key
+  tags: [init_cluster]
+- name: Print init_Cluster on STDOUT
+  debug: msg= {{join_key}}
+  tags: [init_cluster]
+- name: get Calico Yaml file
+  get_url: 
+    url: https://docs.projectcalico.org/v3.9/manifests/calico.yaml 
+    dest: /root/calico.yaml
+  tags: [get_calico]
+- name: Install calico
+  shell: kubectl apply -f calico.yaml
+  tags: [install_calico]

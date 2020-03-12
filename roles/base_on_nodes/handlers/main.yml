@@ -1,0 +1,13 @@
+---
+- name: Restart Docker
+  service:
+          name: docker
+          state: restarted
+          enabled: yes
+  tags: [restart_docker]
+- name: Restart kubelet
+  service:
+          name: kubelet
+          state: restarted
+          enabled: yes
+  tags: [restart_kubelet]

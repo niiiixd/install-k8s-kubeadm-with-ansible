@@ -1,0 +1,4 @@
+---
+- hosts: kubernetes
+  roles:
+    - base_on_nodes
