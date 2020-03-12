@@ -1,5 +1,8 @@
 ---
-- hosts: kubernetes
+- hosts: all-nodes
   roles:
     - base_on_nodes
+
+- hosts: master
+  roles:
     - master_k8s

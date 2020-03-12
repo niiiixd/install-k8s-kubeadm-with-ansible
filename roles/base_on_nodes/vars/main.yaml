@@ -1,13 +1,16 @@
 ---
 nodes_list:
   - {ip: 'NODE-1-IP', name: 'master1.nazarbazi.ir'}
-  - {ip: 'NODE-2-IP', name: 'master2.nazarbazi.ir'}
-  - {ip: 'NODE-3-IP', name: 'worker1.nazarbazi.ir'}
-  - {ip: 'NODE-4-IP', name: 'worker2.nazarbazi.ir'}
-  - {ip: 'NODE-5-IP', name: 'worker3.nazarbazi.ir'}
+  - {ip: 'NODE-2-IP', name: 'worker1.nazarbazi.ir'}
+  - {ip: 'NODE-3-IP', name: 'worker2.nazarbazi.ir'}
+  - {ip: 'NODE-4-IP', name: 'worker3.nazarbazi.ir'}
 
-master:
+init_master:
   init_ip: <INITIAL_MASTER_IP>
+
+master_list:
+  - {ip: 'MASTER-1-IP', name: 'master1.nazarbazi.ir'}
+
 
 join_list:
   - {ip: 'WORKER_IP'}

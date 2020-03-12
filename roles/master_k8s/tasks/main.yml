@@ -1,16 +1,23 @@
-- name: echo to hosts
+- name: initail kubernetes
   shell: kubeadm init --pod-network-cidr=192.168.0.0/16 --apiserver-advertise-address={{init_ip}} --upload-certs
-  with_items: "{{master}}"
+  with_items: "{{init_master}}"
   register: join_key
   tags: [init_cluster]
+
+- name: Save init Key to file
+  local_action: "copy content='{{ join_key.stdout }}' dest=/root/first_init.txt"
+  tags: [save-init-file]
+
 - name: Print init_Cluster on STDOUT
-  debug: msg= {{join_key}}
+  debug: msg= "{{ join_key.stdout }}"
   tags: [init_cluster]
+
 - name: get Calico Yaml file
   get_url: 
     url: https://docs.projectcalico.org/v3.9/manifests/calico.yaml 
     dest: /root/calico.yaml
   tags: [get_calico]
+
 - name: Install calico
   shell: kubectl apply -f calico.yaml
   tags: [install_calico]

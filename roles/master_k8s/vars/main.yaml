@@ -1,17 +1,18 @@
 ---
 nodes_list:
-  - {ip: '194.5.206.100', name: '/root/master1.nazarbazi.ir'}
-  - {ip: '194.5.206.177', name: '/root/master2.nazarbazi.ir'}
-  - {ip: '194.5.206.191', name: '/root/worker1.nazarbazi.ir'}
-  - {ip: '194.5.206.146', name: '/root/worker2.nazarbazi.ir'}
-  - {ip: '194.5.206.32', name: '/root/loadbalancer.nazarbazi.ir'}
+  - {ip: 'NODE-1-IP', name: 'master1.nazarbazi.ir'}
+  - {ip: 'NODE-2-IP', name: 'worker1.nazarbazi.ir'}
+  - {ip: 'NODE-3-IP', name: 'worker2.nazarbazi.ir'}
+  - {ip: 'NODE-4-IP', name: 'worker3.nazarbazi.ir'}
 
-master:
-  init_ip: 194.5.206.100
+init_master:
+  init_ip: <INITIAL_MASTER_IP>
+
+master_list:
+  - {ip: 'MASTER-1-IP', name: 'master1.nazarbazi.ir'}
+
 
 join_list:
-  - {ip: '194.5.206.191'}
-  - {ip: '194.5.206.146'}
+  - {ip: 'WORKER_IP'}
+  - {ip: 'WORKER_IP'}
 
-dev_ip:
-  ansible_facts.eth0.ipv4.address
