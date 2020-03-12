@@ -2,3 +2,4 @@
 - hosts: kubernetes
   roles:
     - base_on_nodes
+    - master_k8s
