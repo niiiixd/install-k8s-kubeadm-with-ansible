@@ -1,5 +1,5 @@
 ---
-- hosts: all-nodes
+- hosts: all_nodes
   roles:
     - base_on_nodes
 
