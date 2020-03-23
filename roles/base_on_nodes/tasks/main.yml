@@ -9,9 +9,6 @@
           dest: /etc/selinux/config
   tags: [add-selinux]
   
-- name: Disable Selinux Shell
-  shell: sed -i 's/^SELINUX=enforcing$/SELINUX=disabled/' /etc/selinux/config
-  tags: [disable_selinux]
 - name: Disable Firewalld
   service:
         name: firewalld
