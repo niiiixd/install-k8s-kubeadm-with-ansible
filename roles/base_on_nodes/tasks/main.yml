@@ -2,7 +2,13 @@
   shell: echo "{{item.ip}} {{item.name}}" >> /etc/hosts
   with_items: "{{nodes_list}}"
   tags: [touch_file]
-
+  
+- name: Add Selinux Config 
+  copy:
+          src: selinux_config
+          dest: /etc/selinux/config
+  tags: [add-selinux]
+  
 - name: Disable Selinux Shell
   shell: sed -i 's/^SELINUX=enforcing$/SELINUX=disabled/' /etc/selinux/config
   tags: [disable_selinux]
