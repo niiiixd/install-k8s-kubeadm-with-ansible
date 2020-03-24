@@ -94,7 +94,7 @@
       state: directory
       owner: root
       group: root
-  tags: [create-docker-serviced[
+  tags: [create-docker-serviced]
 - name: Install Kubernetes
   yum:
     name:
