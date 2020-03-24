@@ -70,8 +70,12 @@
 
 - name: install docker
   yum:
-          name: docker-ce
+          name: "{{ item }}"
           state: latest
+  loop:
+          - " containerd.io "
+          - " docker-ce " 
+          - " docker-ce-cli "
   notify: Restart Docker
   tags: [install_docker]
 
